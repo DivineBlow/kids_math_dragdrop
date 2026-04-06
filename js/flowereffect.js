@@ -1,5 +1,8 @@
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import flower from '../img/flower.png'
+import leaf from '../img/leaf.png'
+
 // DOM selectors
 const containerEl = document.querySelector('.container');
 const textInputEl = document.querySelector('#text-input');
@@ -73,14 +76,14 @@ function init() {
     textCanvas.width = textCanvas.height = 0;
     textCtx = textCanvas.getContext('2d', { willReadFrequently: true });
     particleGeometry = new THREE.PlaneGeometry(1.2, 1.2);
-    const flowerTexture = new THREE.TextureLoader().load('./img/flower.png');
+    const flowerTexture = new THREE.TextureLoader().load(flower);
     flowerMaterial = new THREE.MeshBasicMaterial({
         alphaMap: flowerTexture,
         opacity: .3,
         depthTest: false,
         transparent: true,
     });
-    const leafTexture = new THREE.TextureLoader().load('./img/leaf.png');
+    const leafTexture = new THREE.TextureLoader().load(leaf);
     leafMaterial = new THREE.MeshBasicMaterial({
         alphaMap: leafTexture,
         opacity: .35,
@@ -110,12 +113,12 @@ function createEvents() {
         refreshText();
     });
 
-	 document.addEventListener('click', () => {
+    document.addEventListener('click', () => {
         textInputEl.focus();
-		  setCaretToEndOfInput();
+        setCaretToEndOfInput();
     });
     // textInputEl.addEventListener('blur', () => {
-        // textInputEl.focus();
+    // textInputEl.focus();
     // });
     textInputEl.addEventListener('focus', () => {
         timer.elapsedTime = 0;
@@ -132,7 +135,7 @@ function setCaretToEndOfInput() {
     const el = document.querySelector('#text-input');
     const range = document.createRange();
     const sel = window.getSelection();
-    
+
     // Проверяем, есть ли текст, и ставим каретку в конец первого узла (первой строки)
     if (el.firstChild) {
         range.setStart(el.firstChild, el.firstChild.textContent.length);
@@ -180,28 +183,28 @@ function handleInput() {
         return false
     }
 
-  function getCaretCoordinates() {
-      const range = window.getSelection().getRangeAt(0);
-      const needsToWorkAroundNewlineBug =
-        range.startContainer.nodeName.toLowerCase() === "div" &&
-        range.startOffset === 0;
-      if (needsToWorkAroundNewlineBug) {
-        return [
-          range.startContainer.offsetLeft,
-          range.startContainer.offsetTop
-        ];
-      } else {
-        const rects = range.getClientRects();
-        if (rects[0]) {
-          return [rects[0].left, rects[0].top];
+    function getCaretCoordinates() {
+        const range = window.getSelection().getRangeAt(0);
+        const needsToWorkAroundNewlineBug =
+            range.startContainer.nodeName.toLowerCase() === "div" &&
+            range.startOffset === 0;
+        if (needsToWorkAroundNewlineBug) {
+            return [
+                range.startContainer.offsetLeft,
+                range.startContainer.offsetTop
+            ];
         } else {
-          document.execCommand("selectAll", false, null);
-          return [0, 0];
+            const rects = range.getClientRects();
+            if (rects[0]) {
+                return [rects[0].left, rects[0].top];
+            } else {
+                document.execCommand("selectAll", false, null);
+                return [0, 0];
+            }
         }
-      }
-    
-  }
-	
+
+    }
+
 }
 
 // ---------------------------------------------------------------
@@ -404,14 +407,14 @@ function recreateInstancedMesh() {
     particles.forEach(p => {
         if (p.type === 0) {
             flowerInstancedMesh.setColorAt(flowerIdx, new THREE.Color("hsl(" + p.color + ", 100%, 50%)"));
-            flowerIdx ++;
+            flowerIdx++;
         } else {
             leafInstancedMesh.setColorAt(leafIdx, new THREE.Color("hsl(" + p.color + ", 100%, 20%)"));
-            leafIdx ++;
+            leafIdx++;
         }
     })
 
-    leafInstancedMesh.position.x = flowerInstancedMesh.position.x = -10.5; 
+    leafInstancedMesh.position.x = flowerInstancedMesh.position.x = -10.5;
     leafInstancedMesh.position.y = flowerInstancedMesh.position.y = -10.5;
 }
 
@@ -430,14 +433,15 @@ function updateParticlesMatrices() {
         dummy.updateMatrix();
         if (p.type === 0) {
             flowerInstancedMesh.setMatrixAt(flowerIdx, dummy.matrix);
-            flowerIdx ++;
+            flowerIdx++;
         } else {
             leafInstancedMesh.setMatrixAt(leafIdx, dummy.matrix);
-            leafIdx ++;
+            leafIdx++;
         }
     })
     flowerInstancedMesh.instanceMatrix.needsUpdate = true;
-    leafInstancedMesh.instanceMatrix.needsUpdate = true;}
+    leafInstancedMesh.instanceMatrix.needsUpdate = true;
+}
 
 // ---------------------------------------------------------------
 // Move camera so the text is always visible

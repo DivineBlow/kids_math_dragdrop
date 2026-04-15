@@ -1,22 +1,24 @@
+// app.js
 import { generateExamples } from "./math.js"
 import { renderExamples } from "./ui.js"
-import { startFireworks } from "./fireworks.js"
-import { initFlowerEffect } from "./flowereffect.js" // Добавляем импорт
+import { startFireworks, stopFireworks } from "./fireworks.js" 
+import { initFlowerEffect, syncFlowerEffect } from "./flowereffect.js"
 
 const container = document.getElementById("examples")
-const examples = generateExamples(5)
 
-renderExamples(
-    examples,
+const ui = renderExamples(
+    generateExamples(5),
     container,
-    () => {
-        startFireworks()
-    }
+    () => startFireworks()
 )
 
-// Запускаем 3D-эффект только после того, как примеры загружены в скрытый div
-initFlowerEffect();
+initFlowerEffect()
 
 document.getElementById('refresh-btn').onclick = () => {
-    window.location.reload();
-};
+    stopFireworks() 
+    
+    const newExamples = generateExamples(5)
+    ui.update(newExamples)
+    
+    syncFlowerEffect()
+}

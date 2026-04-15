@@ -62,10 +62,21 @@ export function startFireworks() {
         });
     }
 
-    // Очистка интервалов, если функция вызывается повторно
     if (window.fireworkInterval) clearInterval(window.fireworkInterval);
     if (window.updateInterval) clearInterval(window.updateInterval);
 
     window.fireworkInterval = setInterval(createExplosion, 800);
     window.updateInterval = setInterval(update, 16);
+
+}
+
+export function stopFireworks() {
+    if (window.fireworkInterval) clearInterval(window.fireworkInterval);
+    if (window.updateInterval) clearInterval(window.updateInterval);
+    
+    const canvas = document.getElementById("fireworks");
+    if (canvas) {
+        const ctx = canvas.getContext("2d");
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
 }

@@ -52,6 +52,11 @@ export function initFlowerEffect() {
     render();
 }
 
+export function syncFlowerEffect() {
+    handleInput();
+    refreshText();
+}
+
 // ---------------------------------------------------------------
 
 function init() {
@@ -97,7 +102,7 @@ function init() {
     const cursorGeometry = new THREE.BoxGeometry(.1, 4.5, .03);
     cursorGeometry.translate(.2, -2.9, 0)
     const cursorMaterial = new THREE.MeshBasicMaterial({
-        color: 0x000000,
+        color: 0xfb6e05,
         transparent: true,
     });
     cursorMesh = new THREE.Mesh(cursorGeometry, cursorMaterial);
